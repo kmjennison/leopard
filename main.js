@@ -4,7 +4,8 @@
   var config;
 
   // Length of time we can use an ad after we preload it.
-  var AD_EXPIRATION_SECONDS = 10;
+  var AD_EXPIRATION_SECONDS = 15;
+  var MOCK_NETW0RK_DELAY_MS = 1200;
 
   // Simple interface to localStorage.
   var store = {
@@ -85,11 +86,21 @@
     adUnits.forEach(function(adUnit) {
       adResponse.ads[adUnit.code] = ads[adUnit.code];
     });
+
     return adResponse;
   }
 
-  function fetchAdsFromRemote(adUnits) {
-    var adResponse = mockAdResponse(adUnits);
+  // For demo only.
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+  async function fetchAdsFromRemote(adUnits) {
+    var adResponse = await mockAdResponse(adUnits);
+
+    // Fake network delay.
+    await sleep(MOCK_NETW0RK_DELAY_MS);
+
     var ads = formatAdData(adResponse);
     return ads;
   }
@@ -100,7 +111,7 @@
     container.innerHTML = adData.ad;
   }
 
-  function fetchAds() {
+  async function fetchAds() {
     console.log('Fetching ads.');
 
     var adUnitsToFetch = [];
@@ -116,16 +127,17 @@
     });
     
     if (adUnitsToFetch.length) {
-      console.log('Fetching fresh ads for uncached placements.');
+      console.log('Fetching ads for uncached placements...');
     }
-    var ads = fetchAdsFromRemote(adUnitsToFetch);
+    var ads = await fetchAdsFromRemote(adUnitsToFetch);
     for (var key in ads) {
       renderAd(ads[key]);
     }
 
     // Preload all ads for next time.
-    console.log('Preloading ads for all placements.');
-    var preloadedAds = fetchAdsFromRemote(config.adUnits);
+    console.log('Preloading ads...');
+    var preloadedAds = await fetchAdsFromRemote(config.adUnits);
+    console.log('Ads successfully preloaded.');
     store.setCachedAds(preloadedAds);
   }
 
