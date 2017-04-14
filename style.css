@@ -18,3 +18,10 @@ html {
   width: 300px;
   height: 250px;
 }
+
+.fetched-at {
+  position: absolute;
+  color: #FFF;
+  background: #000;
+  padding: 4px;
+}

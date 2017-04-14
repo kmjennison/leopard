@@ -12,6 +12,7 @@
 
   <body>
     <h3>Proof-of-concept for ad preloading</h3>
+    <p>Page loaded at: <span id='time'><span>
     <div>
         <div class='leaderboard ad-container'>
           <div id='div-gpt-ad-1464385742501-0'></div>
@@ -20,6 +21,10 @@
           <div id='div-gpt-ad-1464385677836-0'></div>
         </div>
     </div>
+
+    <script type='text/javascript'>
+      document.getElementById('time').innerHTML = new Date().toTimeString().split(" ")[0];
+    </script>
     <script type='text/javascript'>
       var leopard = leopard || {};
       leopard.config = leopard.config || {};
