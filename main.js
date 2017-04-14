@@ -60,12 +60,13 @@
     console.log('Found cached ad for placement ' + slotId + '.');
 
     // Delete ad from the cache.
-    delete cachedAds.slotId;
+    delete cachedAds[slotId];
     store.setCachedAds(cachedAds);
 
     return ad;
   }
 
+  // For demo only.
   function mockAdResponse(adUnits) {
 
     var nowStr = new Date().toTimeString().split(" ")[0];
